@@ -44,7 +44,7 @@ steps:
     - compile
     - exec:java
     - -Dexec.mainClass=org.example.Main
-    - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ --templateLocation=gs://techtest-1/temp"
+    - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ "
 
 # # Build the image
 - name: 'gcr.io/cloud-builders/docker'
