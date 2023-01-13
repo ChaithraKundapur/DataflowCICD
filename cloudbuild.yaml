@@ -1,0 +1,119 @@
+
+# Access the id_github file from Secret Manager, and setup SSH
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  secretEnv: ['SSH_KEY']
+  entrypoint: 'bash'
+  args:
+  - -c
+  - |
+    echo "$$SSH_KEY" >> /root/.ssh/id_rsa
+    chmod 400 /root/.ssh/id_rsa
+    ssh-keyscan -t rsa github.com > known_hosts.github
+    cp known_hosts.github /root/.ssh/known_hosts
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
+# Clone the repository
+- name: 'gcr.io/cloud-builders/git'
+  args:
+  - clone
+  - --recurse-submodules
+  - git@github.com:ChaithraKundapur/fgli-dataflow.git
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
+#Static Code Analysis
+- name: 'gcr.io/cloud-builders/mvn'
+  args: ['test','install']
+- name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
+  args: [ 
+      "-Dsonar.projectKey=dataflow", 
+      "-Dsonar.sources=./src", 
+      "-Dsonar.host.url=http://35.244.55.55:9000/", 
+      "-Dsonar.login=${_SONAR_TOKEN}",
+      "-Dsonar.java.binaries=.",
+      "-Dsonar.qualitygate.wait=true" ]
+      
+# Dataflow
+- name: 'gcr.io/cloud-builders/mvn'
+  entrypoint: mvn
+  args:
+    - compile
+    - exec:java
+    - -Dexec.mainClass=org.example.Main
+    - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ --templateLocation=gs://techtest-1/temp"
+
+# Build the image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/niveustraining/my-image:v1.0', '.']
+
+# Check the vulnerabilities and exit if it meets severity level
+- id: scan
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+   - -c
+   - |
+     gcloud artifacts docker images scan 'gcr.io/niveustraining/my-image:v1.0' \
+     --format='value(response.scan)' > /workspace/docdags/scan_id.txt
+       
+- id: severity check2
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - | 
+      gcloud artifacts docker images list-vulnerabilities \
+      $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+      | if grep -Fxq $_SEVERITY2 
+        then echo 'Failed vulnerability check - CRITICAL'
+        exit 1 
+        fi
+          
+- id: severity check1
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - | 
+      gcloud artifacts docker images list-vulnerabilities \
+      $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+        | if grep -Fxq $_SEVERITY1
+          then echo 'Failed vulnerability check - HIGH'
+          exit 1 
+          fi
+# - id: severity check
+#   name: gcr.io/cloud-builders/gcloud
+#   entrypoint: /bin/bash
+#   args:
+#     - -c
+#     - | 
+#       gcloud artifacts docker images list-vulnerabilities \
+#       $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+#         | if grep -Fxq $_SEVERITY 
+#           then echo 'Failed vulnerability check - MEDIUM'
+#           exit 1 
+#           fi
+    
+# Push the image to GCR
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/niveustraining/my-image:v1.0']
+
+# vulnerabiliy scan
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['beta', 'container', 'images', 'describe', 'gcr.io/niveustraining/my-image:v1.0', '--format=json']
+
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/866354246469/secrets/dataflow-secret/versions/latest
+    env: 'SSH_KEY'
+
+substitutions:
+  _SONAR_TOKEN: "sqp_c9ee9094c0a3307dd9a034a7e080ebd49e361798"
+  # _SEVERITY: MEDIUM
+  _SEVERITY1: HIGH
+  _SEVERITY2: CRITICAL
