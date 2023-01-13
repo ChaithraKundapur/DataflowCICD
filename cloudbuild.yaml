@@ -37,7 +37,7 @@ steps:
       "-Dsonar.java.binaries=.",
       "-Dsonar.qualitygate.wait=true" ]
       
-# Dataflow
+# # Dataflow
 - name: 'gcr.io/cloud-builders/mvn'
   entrypoint: mvn
   args:
@@ -46,7 +46,7 @@ steps:
     - -Dexec.mainClass=org.example.Main
     - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ --templateLocation=gs://techtest-1/temp"
 
-# Build the image
+# # Build the image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/niveustraining/my-image:v1.0', '.']
 
