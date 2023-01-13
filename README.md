@@ -9,5 +9,5 @@ mvn compile exec:java \
         --region=asia-south1 \
         --runner=DataflowRunner \
         --gcpTempLocation=gs://dev_fgli/temp_files/ \
-        --templateLocation=gs://fg_code_dev/template/Dataflow/JDBC_to_BigQuery_v10"
+        --templateLocation=gs://fg_code_dev/template/Dataflow/JDBC_to_BigQuery_v10"  
 ```
