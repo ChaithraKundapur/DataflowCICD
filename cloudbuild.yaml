@@ -26,16 +26,16 @@ steps:
     path: /root/.ssh
 
 #Static Code Analysis
-# - name: 'gcr.io/cloud-builders/mvn'
-#   args: ['test','install']
-# - name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
-#   args: [ 
-#       "-Dsonar.projectKey=dataflow", 
-#       "-Dsonar.sources=./src", 
-#       "-Dsonar.host.url=http://35.244.55.55:9000/", 
-#       "-Dsonar.login=${_SONAR_TOKEN}",
-#       "-Dsonar.java.binaries=.",
-#       "-Dsonar.qualitygate.wait=true" ]
+- name: 'gcr.io/cloud-builders/mvn'
+  args: ['test','install']
+- name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
+  args: [ 
+      "-Dsonar.projectKey=dataflow", 
+      "-Dsonar.sources=./src", 
+      "-Dsonar.host.url=http://35.244.55.55:9000/", 
+      "-Dsonar.login=${_SONAR_TOKEN}",
+      "-Dsonar.java.binaries=.",
+      "-Dsonar.qualitygate.wait=true" ]
       
 # # Dataflow
 - name: 'gcr.io/cloud-builders/mvn'
