@@ -20,7 +20,7 @@ steps:
   args:
   - clone
   - --recurse-submodules
-  - git@github.com:ChaithraKundapur/fgli-dataflow.git
+  - git@github.com:ChaithraKundapur/DataflowCicd.git
   volumes:
   - name: 'ssh'
     path: /root/.ssh
