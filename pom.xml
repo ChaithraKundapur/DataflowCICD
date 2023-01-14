@@ -12,8 +12,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <checkstyle.version>2.17</checkstyle.version>
-
         <sonar.host.url>http://35.244.55.55:9000/</sonar.host.url>
 		<sonar.projectKey>dataflow</sonar.projectKey>
 		<sonar.login>admin</sonar.login>
@@ -28,10 +26,10 @@
 
     <build>
         <plugins>
-            <plugin>
+<!--             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            </plugin> -->
             <plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
