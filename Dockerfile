@@ -8,9 +8,15 @@
 # Run:      docker run -ti exoplatform/jdk:openjdk-11 -version
 
 
-FROM maven:3.8.7-openjdk-18-slim
+# FROM maven:3.8.7-openjdk-18-slim
+# RUN mkdir /app
+# WORKDIR /app
+# COPY . /app
+# RUN mvn clean install
+# CMD "mvn" "exec:java"
+
+FROM openjdk:8-jre-alpine
 RUN mkdir /app
 WORKDIR /app
 COPY . /app
-RUN mvn clean install
-CMD "mvn" "exec:java"
+# RUN mvn clean install
