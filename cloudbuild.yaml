@@ -27,7 +27,7 @@ steps:
 
 #Static Code Analysis
 - name: 'gcr.io/cloud-builders/mvn'
-  args: ['test','install']
+  args: ['install']
 - name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
   args: [ 
       "-Dsonar.projectKey=dataflow", 
