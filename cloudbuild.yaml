@@ -37,15 +37,6 @@ steps:
       "-Dsonar.java.binaries=.",
       "-Dsonar.qualitygate.wait=true" ]
       
-# # Dataflow
-- name: 'gcr.io/cloud-builders/mvn'
-  entrypoint: mvn
-  args:
-    - compile
-    - exec:java
-    - -Dexec.mainClass=org.example.Main
-    - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ --stagingLocation=gs://techtest-2/staging/ --network=aa-psrk-lan-trusted --subnetwork=https://www.googleapis.com/compute/v1/projects/niveustraining/regions/asia-south1/subnetworks/psrk-trusted"
-
 # # Build the image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
@@ -105,7 +96,15 @@ steps:
 # vulnerabiliy scan
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['beta', 'container', 'images', 'describe', 'gcr.io/niveustraining/dataflow:v1.0', '--format=json']
-
+  
+# # Dataflow
+- name: 'gcr.io/cloud-builders/mvn'
+  entrypoint: mvn
+  args:
+    - compile
+    - exec:java
+    - -Dexec.mainClass=org.example.Main
+    - "-Dexec.args=--project=niveustraining --region=asia-south1 --runner=DataflowRunner --gcpTempLocation=gs://techtest-2/template/ --stagingLocation=gs://techtest-2/staging/ --network=aa-psrk-lan-trusted --subnetwork=https://www.googleapis.com/compute/v1/projects/niveustraining/regions/asia-south1/subnetworks/psrk-trusted"
 
 availableSecrets:
   secretManager:
