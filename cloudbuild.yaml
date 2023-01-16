@@ -61,7 +61,7 @@ steps:
      gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
      --format='value(response.scan)' > /workspace/docdags/scan_id.txt
        
-# - id: severity check2
+# - id: severity check2 
 #   name: gcr.io/cloud-builders/gcloud
 #   entrypoint: /bin/bash
 #   args:
