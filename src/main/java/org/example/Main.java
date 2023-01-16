@@ -20,6 +20,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 import org.apache.beam.sdk.PipelineResult;
+import org.apache.beam.sdk.io.TextIO;
 
 
 
