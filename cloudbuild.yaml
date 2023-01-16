@@ -61,7 +61,7 @@ steps:
 #       $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
 #       | if grep -Fxq $_SEVERITY2 
 #         then echo 'Failed vulnerability check - CRITICAL'
-#         exit 1 
+#         exit 1
 #         fi
           
 # - id: severity check1
