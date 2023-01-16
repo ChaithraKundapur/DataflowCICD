@@ -36,7 +36,7 @@ steps:
       "-Dsonar.java.binaries=.",
       "-Dsonar.qualitygate.wait=true" ]
       
-# # Build the image
+# Build the image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
 
