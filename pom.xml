@@ -88,36 +88,12 @@
       <version>4.5.1</version>
       <scope>test</scope>
     </dependency>
-<!--     <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-test</artifactId>
-    <version>1.2.3.RELEASE</version>
-    <scope>test</scope>
-			<exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-		</dependency> -->
    <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter</artifactId>
     <version>5.4.0</version>
     <scope>test</scope>
 </dependency>
-<!-- <dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-test</artifactId>
-    <version>4.0.0.RELEASE</version>
-    <scope>test</scope>
-    <exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
-        </dependency> -->
         <dependency>
         	<groupId>org.jacoco</groupId>
         	<artifactId>jacoco-maven-plugin</artifactId>
