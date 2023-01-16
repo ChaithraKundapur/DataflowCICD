@@ -51,14 +51,14 @@ steps:
   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
 
 # Check the vulnerabilities and exit if it meets severity level
-# - id: scan
-#   name: gcr.io/cloud-builders/gcloud
-#   entrypoint: /bin/bash
-#   args:
-#    - -c
-#    - |
-#      gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
-#      --format='value(response.scan)' > /workspace/docdags/scan_id.txt
+- id: scan
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+   - -c
+   - |
+     gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
+     --format='value(response.scan)' > /workspace/docdags/scan_id.txt
        
 # - id: severity check2
 #   name: gcr.io/cloud-builders/gcloud
