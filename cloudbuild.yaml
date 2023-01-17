@@ -19,7 +19,7 @@ steps:
   args:
   - clone
   - --recurse-submodules
-  - git@github.com:ChaithraKundapur/DataflowCicd.git
+  - git@github.com:ChaithraKundapur/DataflowCICD.git
   volumes:
   - name: 'ssh'
     path: /root/.ssh
