@@ -40,53 +40,53 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
 
-# # Check the vulnerabilities and exit if it meets severity level
-# - id: scan
-#   name: gcr.io/cloud-builders/gcloud
-#   entrypoint: /bin/bash
-#   args:
-#    - -c
-#    - |
-#      gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
-#      --format='value(response.scan)' > /workspace/docdags/scan_id.txt
+# Check the vulnerabilities and exit if it meets severity level
+- id: scan
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+   - -c
+   - |
+     gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
+     --format='value(response.scan)' > /workspace/docdags/scan_id.txt
        
-# - id: severity check2 
-#   name: gcr.io/cloud-builders/gcloud
-#   entrypoint: /bin/bash
-#   args:
-#     - -c
-#     - | 
-#       gcloud artifacts docker images list-vulnerabilities \
-#       $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
-#       | if grep -Fxq $_SEVERITY2 
-#         then echo 'Failed vulnerability check - CRITICAL'
-#         exit 1
-#         fi
+- id: severity check2 
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - | 
+      gcloud artifacts docker images list-vulnerabilities \
+      $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+      | if grep -Fxq $_SEVERITY2 
+        then echo 'Failed vulnerability check - CRITICAL'
+        exit 1
+        fi
           
-# - id: severity check1
-#   name: gcr.io/cloud-builders/gcloud
-#   entrypoint: /bin/bash
-#   args:
-#     - -c
-#     - | 
-#       gcloud artifacts docker images list-vulnerabilities \
-#       $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
-#         | if grep -Fxq $_SEVERITY1
-#           then echo 'Failed vulnerability check - HIGH'
-#           exit 1 
-#           fi
-# - id: severity check
-#   name: gcr.io/cloud-builders/gcloud
-#   entrypoint: /bin/bash
-#   args:
-#     - -c
-#     - | 
-#       gcloud artifacts docker images list-vulnerabilities \
-#       $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
-#         | if grep -Fxq $_SEVERITY 
-#           then echo 'Failed vulnerability check - MEDIUM'
-#           exit 1 
-#           fi
+- id: severity check1
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - | 
+      gcloud artifacts docker images list-vulnerabilities \
+      $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+        | if grep -Fxq $_SEVERITY1
+          then echo 'Failed vulnerability check - HIGH'
+          exit 1 
+          fi
+- id: severity check
+  name: gcr.io/cloud-builders/gcloud
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - | 
+      gcloud artifacts docker images list-vulnerabilities \
+      $(cat /workspace/docdags/scan_id.txt) --format='value(vulnerability.effectiveSeverity)' \
+        | if grep -Fxq $_SEVERITY 
+          then echo 'Failed vulnerability check - MEDIUM'
+          exit 1 
+          fi
     
 # Push the image to GCR
 - name: 'gcr.io/cloud-builders/docker'
@@ -112,6 +112,6 @@ availableSecrets:
 
 substitutions:
   _SONAR_TOKEN: "sqp_c9ee9094c0a3307dd9a034a7e080ebd49e361798"
-  # _SEVERITY: MEDIUM
-#   _SEVERITY1: HIGH 
-#   _SEVERITY2: CRITICAL 
+  _SEVERITY: MEDIUM
+  _SEVERITY1: HIGH 
+  _SEVERITY2: CRITICAL 
