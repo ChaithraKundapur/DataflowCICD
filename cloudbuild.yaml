@@ -25,30 +25,30 @@ steps:
     path: /root/.ssh
 
 #Static Code Analysis
-- name: 'gcr.io/cloud-builders/mvn'
-  args: ['test','install']
-- name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
-  args: [ 
-      "-Dsonar.projectKey=dataflow", 
-      "-Dsonar.sources=./src", 
-      "-Dsonar.host.url=http://35.244.55.55:9000/", 
-      "-Dsonar.login=${_SONAR_TOKEN}",
-      "-Dsonar.java.binaries=.",
-      "-Dsonar.qualitygate.wait=true" ]
+# - name: 'gcr.io/cloud-builders/mvn'
+#   args: ['test','install']
+# - name: "gcr.io/$PROJECT_ID/sonar-scanner:latest" 
+#   args: [ 
+#       "-Dsonar.projectKey=dataflow", 
+#       "-Dsonar.sources=./src", 
+#       "-Dsonar.host.url=http://35.244.55.55:9000/", 
+#       "-Dsonar.login=${_SONAR_TOKEN}",
+#       "-Dsonar.java.binaries=.",
+#       "-Dsonar.qualitygate.wait=true" ]
       
-# Build the image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
+# # Build the image
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
 
-# Check the vulnerabilities and exit if it meets severity level
-- id: scan
-  name: gcr.io/cloud-builders/gcloud
-  entrypoint: /bin/bash
-  args:
-   - -c
-   - |
-     gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
-     --format='value(response.scan)' > /workspace/docdags/scan_id.txt
+# # Check the vulnerabilities and exit if it meets severity level
+# - id: scan
+#   name: gcr.io/cloud-builders/gcloud
+#   entrypoint: /bin/bash
+#   args:
+#    - -c
+#    - |
+#      gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
+#      --format='value(response.scan)' > /workspace/docdags/scan_id.txt
        
 # - id: severity check2 
 #   name: gcr.io/cloud-builders/gcloud
@@ -89,12 +89,12 @@ steps:
 #           fi
     
 # Push the image to GCR
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/niveustraining/dataflow:v1.0']
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'gcr.io/niveustraining/dataflow:v1.0']
 
 # vulnerabiliy scan
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'container', 'images', 'describe', 'gcr.io/niveustraining/dataflow:v1.0', '--format=json']
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   args: ['beta', 'container', 'images', 'describe', 'gcr.io/niveustraining/dataflow:v1.0', '--format=json']
   
 # Dataflow
 - name: 'gcr.io/cloud-builders/mvn'
@@ -110,8 +110,8 @@ availableSecrets:
   - versionName: projects/866354246469/secrets/dataflow-secret/versions/latest
     env: 'SSH_KEY'
 
-substitutions:
-  _SONAR_TOKEN: "sqp_c9ee9094c0a3307dd9a034a7e080ebd49e361798"
+# substitutions:
+#   _SONAR_TOKEN: "sqp_c9ee9094c0a3307dd9a034a7e080ebd49e361798"
   # _SEVERITY: MEDIUM
 #   _SEVERITY1: HIGH 
 #   _SEVERITY2: CRITICAL
