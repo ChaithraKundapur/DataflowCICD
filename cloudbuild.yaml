@@ -113,5 +113,5 @@ availableSecrets:
 substitutions:
   _SONAR_TOKEN: "sqp_c9ee9094c0a3307dd9a034a7e080ebd49e361798"
   # _SEVERITY: MEDIUM
-#   _SEVERITY1: HIGH
+#   _SEVERITY1: HIGH 
 #   _SEVERITY2: CRITICAL
