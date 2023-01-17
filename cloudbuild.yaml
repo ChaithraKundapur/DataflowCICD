@@ -24,7 +24,7 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
       
-# # Build the image
+# Build the image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/niveustraining/dataflow:v1.0', '.']
 
