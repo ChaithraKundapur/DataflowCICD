@@ -38,7 +38,7 @@ steps:
      gcloud artifacts docker images scan 'gcr.io/niveustraining/dataflow:v1.0' \
      --format='value(response.scan)' > /workspace/docdags/scan_id.txt
        
-- id: severity check2 
+- id: severity Critical
   name: gcr.io/cloud-builders/gcloud
   entrypoint: /bin/bash
   args:
@@ -51,7 +51,7 @@ steps:
         exit 1
         fi
           
-- id: severity check1
+- id: severity High
   name: gcr.io/cloud-builders/gcloud
   entrypoint: /bin/bash
   args:
@@ -63,7 +63,7 @@ steps:
           then echo 'Failed vulnerability check - HIGH'
           exit 1 
           fi
-- id: severity check
+- id: severity Medium
   name: gcr.io/cloud-builders/gcloud
   entrypoint: /bin/bash
   args:
